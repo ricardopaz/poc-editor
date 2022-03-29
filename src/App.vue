@@ -1,21 +1,29 @@
 <template>
-  <TextEditor />
+  <QuillEditor />
+  <!-- <TinyEditor /> -->
 </template>
 
 <script>
-import TextEditor from './components/TextEditor.vue'
+// import TinyEditor from './components/Tiny.vue'
+import QuillEditor from './components/Quill.vue'
 
 export default {
   name: 'App',
   components: {
-    TextEditor
+    QuillEditor,
+    // TinyEditor
   }
 }
 </script>
 
 <style>
+html,
+body,
 #app {
+  padding: 0;
+  margin: 0;
   height: 100vh;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
