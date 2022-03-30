@@ -9,9 +9,11 @@
     "@tinymce/tinymce-vue": "^4",
     "@vueup/vue-quill": "^1.0.0-beta.8",
     "core-js": "^3.6.5",
+    "file-saver": "^2.0.5",
     "quill-better-table": "^1.2.10",
     "quill-placeholder-autocomplete-module": "^1.2.0",
     "quill-placeholder-module": "^0.3.1",
+    "quill-to-word": "^1.3.0",
     "vue": "^3.0.0",
     "vue-quill-editor": "^3.0.6"
   },

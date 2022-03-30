@@ -8,15 +8,20 @@
           <option value="large"></option>
           <option value="huge"></option>
         </select>
+
         <button class="ql-bold"></button>
         <button class="ql-italic"></button>
         <button class="ql-underline"></button>
-        <select class="ql-align">
-          <option selected></option>
-          <option value="center"></option>
-          <option value="right"></option>
-          <option value="justify"></option>
-        </select>
+
+        <button class="ql-list" value="ordered"></button>
+        <button class="ql-list" value="bullet"></button>
+
+        <button class="ql-align" value=""></button>
+        <button class="ql-align" value="center"></button>
+        <button class="ql-align" value="right"></button>
+        <button class="ql-align" value="justify"></button>
+
+        <button @click="saveAsWord">Baixar Word</button>
       </span>
 
       <span class="ql-formats">
@@ -48,22 +53,28 @@
 <script>
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
+import { saveAs } from "file-saver"
 import { Quill } from '@vueup/vue-quill'
 
+import * as quillToWord from "quill-to-word";
 import QuillBetterTable from "quill-better-table";
 import getPlaceholderModule from 'quill-placeholder-module'
 import getAutocompleteModule from 'quill-placeholder-autocomplete-module'
 
-
 Quill.register("modules/better-table", QuillBetterTable);
 Quill.register('modules/placeholder', getPlaceholderModule(Quill))
 Quill.register('modules/autocomplete', getAutocompleteModule(Quill))
+
+const quillToWordConfig = {
+  exportAs: "blob"
+};
 
 export default {
   name: 'QuillEditor',
 
   data() {
     return {
+      quill: null,
       placeholders: [
         {id: 'locatarioNome', label: 'Nome do Locatário'},
         {id: 'locatarioNacionalidade', label: 'Nacionalidade do Locatário'},
@@ -115,13 +126,21 @@ export default {
           getPlaceholders: () => this.placeholders,
           // onClose: (placeholder) => console.log('user choosed:', placeholder),      // optional
           // fetchPlaceholders: (query) => fetch(...).then(...),                     // optional
-          onFetchStarted: (query) => console.log('user searching for:', query),     // optional
-          onFetchFinished: (results) => console.log('possible results:', results),  // optional
+          // onFetchStarted: (query) => console.log('user searching for:', query),     // optional
+          // onFetchFinished: (results) => console.log('possible results:', results),  // optional
         },
       },
     }
 
-    new Quill('#editor', quillProps)
+    this.quill = new Quill('#editor', quillProps)
+  },
+
+  methods: {
+    async saveAsWord() {
+      const delta = this.quill.getContents()
+      const docAsBlob = await quillToWord.generateWord(delta, quillToWordConfig)
+      saveAs(docAsBlob, "word-export.docx");
+    }
   }
 }
 </script>
@@ -134,7 +153,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: scroll;
-  background: #E5E5E5;
+  background: #F5F5F5;
   font-family: Nunito Sans;
   display: grid;
   grid-template-areas:
@@ -237,7 +256,7 @@ export default {
 }
 
 .ql-picker.ql-placeholder > span.ql-picker-label::before {
-  content: 'Tags';
+  content: 'Variáveis';
 }
 
 .ql-picker.ql-placeholder > span.ql-picker-options > span.ql-picker-item::before {
